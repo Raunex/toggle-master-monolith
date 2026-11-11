@@ -1,5 +1,7 @@
 # Tech Challenge - Fase 1: Plataforma "ToggleMaster"
 
+Documentação da entrega (arquitetura, 12 fatores e diagrama): [`docs/`](docs/README.md).
+
 Bem-vindo à primeira fase do Tech Challenge do curso de DevOps! Neste projeto, construiremos uma plataforma de *Feature Flag as a Service* chamada **ToggleMaster**.
 
 ## 📖 Cenário

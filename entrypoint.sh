@@ -16,13 +16,10 @@ fi
 
 echo "Aguardando o banco de dados em ${DB_HOST}:${DB_PORT}..."
 
-# Loop para aguardar o banco de dados ficar disponível
-# Para PostgreSQL, usamos o `pg_isready` (instale postgresql-client na imagem)
-# Usamos `until` em vez de `while ! ...` para maior portabilidade entre /bin/sh implementations
-until pg_isready -h "$DB_HOST" -p "$DB_PORT" -q -U "${DB_USER:-}" >/dev/null 2>&1; do
-  echo "Banco de dados indisponível - aguardando..."
-  sleep 1
-done
+# Aguarda o banco de dados ficar disponível (loop e timeout em wait_for_db.py).
+# Se o banco não subir dentro de DB_WAIT_TIMEOUT, o script falha e o `set -e`
+# encerra o container.
+python wait_for_db.py
 
 echo "Banco de dados disponível!"
 

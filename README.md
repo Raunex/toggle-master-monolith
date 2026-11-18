@@ -190,6 +190,8 @@ Este guia assume que você já criou uma instância EC2 e um banco de dados RDS,
 
 > **Importante:** Lembre-se de configurar o **Security Group** da sua instância EC2 para permitir tráfego de entrada na porta `5000` (para a aplicação) e na porta `22` (para o SSH). O Security Group do RDS deve permitir tráfego na porta `5432` vindo do Security Group da sua EC2.
 
+> **Versão do Python:** a aplicação usa **Python 3.9.25** (a mesma versão da imagem do `Dockerfile`), declarado no arquivo `.python-version`. O `requirements.txt` foi gerado para essa versão, então **não use o `python3` do sistema**: ele muda conforme a distribuição e pode quebrar a instalação das dependências. Os passos abaixo usam o [uv](https://docs.astral.sh/uv/), que lê o `.python-version` e instala a versão correta.
+
 Escolha a opção correspondente ao sistema operacional da sua instância EC2.
 
 ### Opção A: Para Amazon Linux 2 ou Amazon Linux 2023
@@ -197,7 +199,7 @@ Escolha a opção correspondente ao sistema operacional da sua instância EC2.
 1.  **Atualize o sistema e instale as ferramentas:**
     ```bash
     sudo yum update -y
-    sudo yum install -y git python3 python3-pip
+    sudo yum install -y git
     ```
 
 2.  **Clone o repositório do seu projeto:**
@@ -206,16 +208,18 @@ Escolha a opção correspondente ao sistema operacional da sua instância EC2.
     cd toggle-master-monolith
     ```
 
-3.  **Crie e ative um ambiente virtual para o Python:**
+3.  **Instale o `uv` e crie o ambiente virtual com a versão correta do Python:**
     ```bash
-    python3 -m venv venv
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    source $HOME/.local/bin/env
+    uv venv venv
     source venv/bin/activate
-    # Seu prompt do terminal deve mudar, indicando que o ambiente virtual está ativo.
+    python --version    # deve mostrar Python 3.9.25
     ```
 
 4.  **Instale as dependências da aplicação:**
     ```bash
-    pip install -r requirements.txt
+    uv pip install -r requirements.txt
     ```
 
 ### Opção B: Para Ubuntu Server 20.04 / 22.04 LTS
@@ -223,7 +227,7 @@ Escolha a opção correspondente ao sistema operacional da sua instância EC2.
 1.  **Atualize o sistema e instale as ferramentas:**
     ```bash
     sudo apt update && sudo apt upgrade -y
-    sudo apt install -y git python3-pip python3-venv
+    sudo apt install -y git curl
     ```
 
 2.  **Clone o repositório do seu projeto:**
@@ -232,16 +236,19 @@ Escolha a opção correspondente ao sistema operacional da sua instância EC2.
     cd toggle-master-monolith
     ```
 
-3.  **Crie e ative um ambiente virtual para o Python:**
+3.  **Instale o `uv` e crie o ambiente virtual com a versão correta do Python:**
     ```bash
-    python3 -m venv venv
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    source $HOME/.local/bin/env
+    uv venv venv
     source venv/bin/activate
-    # Seu prompt do terminal deve mudar, indicando que o ambiente virtual está ativo.
+    python --version    # deve mostrar Python 3.9.25
     ```
 
 4.  **Instale as dependências da aplicação:**
     ```bash
-    pip install -r requirements.txt
+    # O venv criado pelo uv não inclui o pip; use o "uv pip".
+    uv pip install -r requirements.txt
     ```
 
 ---
